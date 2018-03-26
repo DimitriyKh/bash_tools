@@ -2,15 +2,16 @@
 
 
 ### bad_coll.sh
-get list of bad collations from mysql, see sql.tasks and loop_send_mysql_cmd.sh , store it to txt
-format it and run bad_coll.sh
+It will simply join multiple MODIFY statements for one folder into single ALTER command
+Pre Requirements:
+get list of bad collations from mysql, see sql.tasks and loop_send_mysql_cmd.sh to how,
+store it to txt, format it with AWK and run bad_coll.sh
 ```bash
 awk '{if ($1 ~ /(panda540|forex)/) print "USE",$1,"; ALTER TABLE",$2,"MODIFY",$3,$4,"CHARACTER SET utf8  COLLATE utf8_general_ci;" ; else print}' bad.collation.txt | grep -v CHARACTER_SET_NAME > bad.collation.fix.txt
 awk '{$8="\`"$8"\`"; print}' bad.collation.20170926.fix.txt > bad.collation.20170926.fix.ticks.txt
 ./bad_coll.sh -f bad.collation.20170926.fix.ticks.txt
 
 ```
-It will simply join multiple MODIFY statements for one folder into single ALTER command
 
 
 ## EXPECT scripts
