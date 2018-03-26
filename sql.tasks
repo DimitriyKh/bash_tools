@@ -1,0 +1,46 @@
+
+# find field with escape \
+SELECT * FROM table WHERE field LIKE '%\\\%' 
+#or with ESCAPE 
+SELECT * FROM or WHERE field LIKE '%\%' ESCAPE '|'
+
+
+#to test query with profiling see profiles and check the query number
+SHOW PROFILES;
+-- SHOW PROFILE;
+SHOW PROFILE FOR  QUERY 17;
+#to clear prolfiles
+SET profiling =0 ;
+SET @@profiling_history_size = 0;
+SET @@profiling_history_size = 100; 
+SET profiling =1 ;
+
+
+#sql for gaps
+SELECT 
+          (t1.id + 1) AS gap_starts_at
+        , (SELECT MIN(t3.id) -1 FROM `Employees` t3 WHERE t3.id > t1.id) AS gap_ends_at 
+FROM `Employees` t1 
+WHERE NOT EXISTS (SELECT t2.id FROM `Employees` t2 WHERE t2.id = t1.id + 1) 
+HAVING gap_ends_at IS NOT NULL
+
+#check for collations other than 'utf8_general_ci';
+#tables
+SELECT table_schema, table_name, table_collation 
+    FROM information_schema.tables 
+    WHERE (TABLE_SCHEMA LIKE 'table1%' OR TABLE_SCHEMA LIKE 'table2%' ) 
+      AND (table_collation !='utf8_general_ci' AND table_collation !='utf8mb4_general_ci');
+
+#fields
+SELECT  `TABLE_SCHEMA`, `TABLE_NAME`, `COLUMN_NAME`, `COLUMN_TYPE`, `CHARACTER_SET_NAME`, `COLLATION_NAME`
+  FROM `information_schema`.`COLUMNS`
+  WHERE TABLE_SCHEMA LIKE 'table%' AND COLLATION_NAME !='utf8_general_ci';
+
+#and fix
+#table
+ALTER TABLE `table` DEFAULT CHARSET=utf8, COLLATE=utf8_general_ci; 
+#fields
+ALTER TABLE `TABLE_NAME`
+     MODIFY  `COLUMN_NAME`  `COLUMN_TYPE`    CHARACTER SET utf8   COLLATE utf8_general_ci
+   , MODIFY  `COLUMN_NAME2` `COLUMN_TYPE`    CHARACTER SET utf8   COLLATE utf8_general_ci ;
+

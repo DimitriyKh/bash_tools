@@ -1,0 +1,5 @@
+#Install inotify-tools
+apt install inotify-tools
+
+#make a loop to watch for bash script and launch it every time write is done
+while [[ -f BASH_SCRIPT.sh ]]  ; do if [[ $(inotifywait -e modify BASH_SCRIPT.sh ) -lt 1 ]] ; then ./BASH_SCRIPT.sh ; else echo false; fi; done  
