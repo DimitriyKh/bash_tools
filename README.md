@@ -2,7 +2,7 @@
 
 
 ### bad_coll.sh
-It will simply join multiple MODIFY statements for one folder into single ALTER command
+It will simply join multiple MODIFY statements for one table into single ALTER command
 Pre Requirements:
 get list of bad collations from mysql, see sql.tasks and loop_send_mysql_cmd.sh to how,
 store it to txt, format it with AWK and run bad_coll.sh
