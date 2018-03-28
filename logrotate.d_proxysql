@@ -1,0 +1,12 @@
+/var/lib/proxysql/proxysql.log {
+  missingok
+  weekly
+  notifempty
+  compress
+  create 0644
+  rotate 5
+  postrotate
+  mysql -uadmin -padmin -h127.0.0.1 -P6032 -e "PROXYSQL FLUSH LOGS"
+  endscript
+}
+
