@@ -85,10 +85,10 @@ privateip=$(ip a | awk '/inet/ {print $2}' | awk -F'/' '/^10.0/ {print $1}')
 pmm-admin config --server 1.2.3.4 --server-user ${PMM_USER} --server-password ${PMM_PASS} --client-address $publicip --bind-address $privateip --client-name ${Client_Name}
 pmm-admin add mysql --create-user --create-user-password ${PMM_MYSQL_PASS} --force
 
-mongo_user=$(awk -F"'" '^\$dbconfig..mongodb....username/ {print $(NF-1)}' config.inc.php)
-mongo_pass=$(egrep '^\$dbconfig..mongodb....password' config.inc.php | tail -1 | awk -F"'" '{print $(NF-1)}')
-mongo_db=$(egrep '^\$dbconfig..mongodb....db_name' config.inc.php | tail -1 | awk -F"'" '{print $(NF-1)}')
-mongo_server=$(egrep '^\$dbconfig..mongodb....db_server' config.inc.php | tail -1 | awk -F"'" '{print $(NF-1)}' | cut -d'/' -f3-)
+mongo_user=$(awk -F"'" '/^\$dbconfig..mongodb....username/ {print $(NF-1)}' config.inc.php)
+mongo_pass=$(egrep '/^\$dbconfig..mongodb....password' config.inc.php | tail -1 | awk -F"'" '{print $(NF-1)}')
+mongo_db=$(egrep '/^\$dbconfig..mongodb....db_name' config.inc.php | tail -1 | awk -F"'" '{print $(NF-1)}')
+mongo_server=$(egrep '/^\$dbconfig..mongodb....db_server' config.inc.php | tail -1 | awk -F"'" '{print $(NF-1)}' | cut -d'/' -f3-)
 
 pmm-admin add mongodb:metrics --uri mongodb://${mongo_user}:${mongo_pass}@${mongo_server}/${mongo_db}
 ```
