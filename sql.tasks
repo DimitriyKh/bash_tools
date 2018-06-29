@@ -20,6 +20,16 @@ SELECT SUBSTRING_INDEX(CONCAT(USER,'@',HOST),':',1 ),COUNT(*)
 FROM information_schema.processlist 
 GROUP BY 1
 
+#see connections per ip count
+SELECT 	  count(*)
+        , group_concat(distinct user)
+        , left(host,(locate(':',host))-1) as ip
+        , group_concat(distinct db) 
+FROM information_schema.PROCESSLIST
+group by ip
+order by 1 desc;
+
+
 #sql for gaps
 SELECT 
           (t1.id + 1) AS gap_starts_at
@@ -48,12 +58,4 @@ ALTER TABLE `TABLE_NAME`
      MODIFY  `COLUMN_NAME`  `COLUMN_TYPE`    CHARACTER SET utf8   COLLATE utf8_general_ci
    , MODIFY  `COLUMN_NAME2` `COLUMN_TYPE`    CHARACTER SET utf8   COLLATE utf8_general_ci ;
 
-#get connections per ip/host count
-SELECT 	  count(*)
-        , group_concat(distinct user)
-        , left(host,(locate(':',host))-1) as ip
-        , group_concat(distinct db) 
-FROM information_schema.PROCESSLIST
-group by ip
-order by 1 desc;
 
