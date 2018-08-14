@@ -59,3 +59,8 @@ ALTER TABLE `TABLE_NAME`
    , MODIFY  `COLUMN_NAME2` `COLUMN_TYPE`    CHARACTER SET utf8   COLLATE utf8_general_ci ;
 
 
+# to use WHERE IN () clause with pymysql we can pass arguments as tuple 
+        t_cursor.execute(sql,((prpt_tp_id),))
+        # also with inplace convert to tuple
+        args = ["a", "b", "c"]
+        cur.execute('select x from y where z in %s',(tuple(args),))
