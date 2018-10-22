@@ -36,7 +36,7 @@ for file in 'opt_consul-data.tar' 'opt_prometheus_data.tar' 'var_lib_grafana.tar
 ```
 
 ### configure smtp
-````
+```
 sudo docker exec -it {CONTAINER ID} /bin/bash
 
 vi /etc/grafana/grafana.ini
