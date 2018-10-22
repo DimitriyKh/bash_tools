@@ -29,9 +29,28 @@ docker run -d \
 ```
  for volume in '/opt/prometheus/data' '/opt/consul-data' '/var/lib/mysql' '/var/lib/grafana'; do backup_file=$(echo ${volume} | sed  's#^/##;s#/#_#g;s#$#.tar#') ; docker run --rm --volumes-from pmm-data -v $(pwd):/backup alpine tar -cvf ${backup_file} ${volume} ; done
 ```
+
 ### restore volumes data
 ```
 for file in 'opt_consul-data.tar' 'opt_prometheus_data.tar' 'var_lib_grafana.tar' 'var_lib_mysql.tar' ; do docker run --rm --volumes-from pmm-data -v $(pwd):/backup  alpine tar -xvf /backup/${file} ; done
+```
+
+### configure smtp
+````
+sudo docker exec -it {CONTAINER ID} /bin/bash
+
+vi /etc/grafana/grafana.ini
+```
+
+Find [smtp] section and add:
+```
+enabled = true
+host = email-smtp.eu-west-1.amazonaws.com:587
+user = ${aws_access_key_id}
+password = ${aws_secret_access_key}
+from_address = info@example.com
+from_name = Grafana
+ehlo_identity = grafana.example.com
 ```
 
 # PMM Client setup
